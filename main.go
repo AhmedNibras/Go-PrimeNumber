@@ -11,11 +11,11 @@ func main() {
 	var wg sync.WaitGroup
 
 	wg.Add(5)
-	go printPrimeNumbers(2, 10, &wg)
-	go printPrimeNumbers(20, 30, &wg)
-	go printPrimeNumbers(30, 40, &wg)
-	go printPrimeNumbers(50, 60, &wg)
-	go printPrimeNumbers(60, 70, &wg)
+	go PrimeNumbers(2, 10, &wg)
+	go PrimeNumbers(20, 30, &wg)
+	go PrimeNumbers(30, 40, &wg)
+	go PrimeNumbers(50, 60, &wg)
+	go PrimeNumbers(60, 70, &wg)
 
 	wg.Wait()
 	end := time.Now()
@@ -24,7 +24,7 @@ func main() {
 	fmt.Println()
 }
 
-func printPrimeNumbers(num1, num2 int, wg *sync.WaitGroup) {
+func PrimeNumbers(num1, num2 int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	sum := 0
 	count := 0
