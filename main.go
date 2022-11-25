@@ -8,30 +8,37 @@ import (
 
 func main() {
 	start := time.Now()
-	var wg sync.WaitGroup
 
-	wg.Add(5)
-	go PrimeNumbers(2, 10, &wg)
-	go PrimeNumbers(20, 30, &wg)
-	go PrimeNumbers(30, 40, &wg)
-	go PrimeNumbers(50, 60, &wg)
-	go PrimeNumbers(60, 70, &wg)
+	Wait()
 
-	wg.Wait()
 	end := time.Now()
 	duration := end.Sub(start)
 	fmt.Println(duration)
 	fmt.Println()
 }
 
+func Wait() {
+	var wg sync.WaitGroup
+	routines := 5
+	dataSize := 1000
+	chunk := dataSize / routines
+	start := 0
+	end := 0
+	for i := 0; i < routines; i++ {
+		start = end
+		end = start + chunk
+		wg.Add(1)
+		fmt.Printf("%v -> %v\n", start, end)
+		go PrimeNumbers(start, end, &wg)
+	}
+	wg.Wait()
+}
+
 func PrimeNumbers(num1, num2 int, wg *sync.WaitGroup) {
 	defer wg.Done()
 	sum := 0
 	count := 0
-	if num1 < 2 || num2 < 2 {
-		fmt.Println("Numbers must be greater than 2.")
-		return
-	}
+
 	for num1 <= num2 {
 		isPrime := true
 		for i := 2; i <= num1/2; i++ {
@@ -49,5 +56,6 @@ func PrimeNumbers(num1, num2 int, wg *sync.WaitGroup) {
 	}
 	fmt.Println()
 	fmt.Println("Sum: ", sum)
+	// fmt.Println("Sum: ", a)
 	fmt.Println("Count: ", count)
 }
